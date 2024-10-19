@@ -150,15 +150,18 @@ const percentages = data.map(value => ((value / totalVentas) * 100).toFixed(1));
 
 const ctx = document.getElementById('salesChart').getContext('2d');
 new Chart(ctx, {
-    type: 'bar',
+    type: 'line',
     data: {
         labels: labels,
         datasets: [{
             label: 'Ventas en soles',
             data: data,
-            backgroundColor: 'rgb(153, 228, 114)',
-            borderColor: 'rgb(153, 228, 114)',
-            borderWidth: 1
+            fill: true,
+            backgroundColor: 'rgba(200, 200, 200, 0.2)',
+            borderColor: 'rgb(75, 75, 75)',
+            tension: 0.4,
+            pointRadius: 4,
+            pointBackgroundColor: 'rgb(75, 75, 75)'
         }]
     },
     options: {
@@ -167,9 +170,26 @@ new Chart(ctx, {
         plugins: {
             title: {
                 display: true,
-                text: 'Ventas mensuales en Soles de Productos  2022',
+                text: `Ventas en Soles - 2022: ${totalVentas}`,
                 color: 'black' 
             },
+
+            padding:{
+                        bottom: 50
+                    },
+                     customSubtitle: {  // Cambiar 'subtitle' a 'customSubtitle' para que funcione con el plugin
+                            display: true,
+                            texts: [
+                            `Mes: Diciembre`,
+                            'Año: 2022'  // Agrega aquí el tercer subtítulo
+                        ],
+                            color: 'black' ,
+                            position: 'top-left',
+                            padding: {
+                            top: 1,
+                            left: 10,
+                    },
+                     },   
             tooltip: {
                 callbacks: {
                     label: function(context) {
@@ -189,11 +209,36 @@ new Chart(ctx, {
     plugins: [{
         afterDraw: function(chart) {
             var ctx = chart.ctx;
+
+            // Dibuja los subtítulos
+            const titleHeight = chart.options.plugins.title.display ? 30 : 0;
+            const startY = titleHeight + 10;  // Posición inicial después del título
+
+            const subtitleOptions = chart.options.plugins.customSubtitle;
+            if (subtitleOptions.display) {
+                ctx.save();
+                ctx.fillStyle = subtitleOptions.color || 'black';
+                ctx.font = '14px Arial';
+                ctx.textAlign = 'left';
+                
+                // Posición fija en la esquina superior izquierda
+                const startX = chart.chartArea.left; // Alinea con el área del gráfico
+                const startY = 5; // Muy cerca del borde superior
+                
+                subtitleOptions.texts.forEach((text, index) => {
+                    ctx.fillText(
+                        text,
+                        startX,
+                        startY + (index * 18)
+                    );
+                });
+                ctx.restore();
+            }
+            // Dibuja el porcentaje en cada barra
             chart.data.datasets.forEach(function (dataset, i) {
                 var meta = chart.getDatasetMeta(i);
                 if (!meta.hidden) {
                     meta.data.forEach(function(element, index) {
-                        // Dibuja el porcentaje en cada barra
                         ctx.fillStyle = 'rgb(0, 0, 0)';
                         var fontSize = 12;
                         var fontStyle = 'normal';

@@ -163,23 +163,15 @@
         //
          const ctx = document.getElementById('salesChart').getContext('2d');
          new Chart(ctx, {
-             type: 'line',
+             type: 'bar',
              data: {
                  labels: labels,
                  datasets: [{
                      label: 'Ventas en Cantidad',
                      data: data,
-                    fill: true,
-                    backgroundColor: 'rgba(200, 200, 200, 0.2)',
-                    borderColor: 'rgb(75, 75, 75)',
-                    tension: 0.4,
-                    pointRadius: 4,
-                    pointBackgroundColor: 'rgb(75, 75, 75)'
-                     
-                     
-                     //backgroundColor: 'rgb(255, 138, 118)',
-                     //borderColor: 'rgb(255, 138, 118)',
-                     //borderWidth: 1
+                     backgroundColor: 'rgb(255, 138, 118)',
+                     borderColor: 'rgb(255, 138, 118)',
+                     borderWidth: 1
                  }]
              },
              options: {
@@ -226,7 +218,6 @@
                  }
              },
              plugins: [{
-            
             afterDraw: function(chart) {
             var ctx = chart.ctx;
 

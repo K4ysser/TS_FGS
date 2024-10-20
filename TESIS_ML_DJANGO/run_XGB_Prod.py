@@ -25,7 +25,7 @@ data['MES_SIN'] = np.sin(2 * np.pi * data['MESES_NUM'] / 12)
 data['MES_COS'] = np.cos(2 * np.pi * data['MESES_NUM'] / 12)
 
 # Seleccionar las características y el objetivo
-X = data[['ANIO', 'MES_SIN', 'MES_COS', 'TOTAL_VENTAS_SOLES']]
+X = data[['ANIO', 'MES_SIN', 'MES_COS', 'TOTAL_VENTAS_EN_SOLES']]
 y = data['TOTAL_VENTAS']
 
 # Dividir los datos en conjuntos de entrenamiento y prueba
@@ -68,21 +68,21 @@ print(f"R2 Score: {r2:.2f}")
 print(f"MAE: {mae:.2f}\n")
 
 # Guardar el modelo y el escalador como archivos .sav
-pickle.dump(best_model, open("modelo_ventas_xgboost.sav", "wb"))
-pickle.dump(scaler, open("scaler_ventas_xgboost.sav", "wb"))
+pickle.dump(best_model, open("modelo_productividad_xgboost.sav", "wb"))
+pickle.dump(scaler, open("scaler_productividad_xgboost.sav", "wb"))
 
 # Función para hacer predicciones
-def predict_total_ventas(anio, ventas_por_mes):
-    model = pickle.load(open("modelo_ventas_xgboost.sav", "rb"))
-    scaler = pickle.load(open("scaler_ventas_xgboost.sav", "rb"))
+def predict_total_ventas(anio, avena_por_mes):
+    model = pickle.load(open("modelo_productividad_xgboost.sav", "rb"))
+    scaler = pickle.load(open("scaler_productividad_xgboost.sav", "rb"))
     
     predictions = []
-    for mes, total_venta_en_soles in enumerate(ventas_por_mes, start=1):
+    for mes, total_venta_en_soles in enumerate(avena_por_mes, start=1):
         mes_sin = np.sin(2 * np.pi * mes / 12)
         mes_cos = np.cos(2 * np.pi * mes / 12)
         
         input_data = pd.DataFrame([[anio, mes_sin, mes_cos, total_venta_en_soles]], 
-                                  columns=['ANIO', 'MES_SIN', 'MES_COS', 'TOTAL_VENTAS_SOLES'])
+                                  columns=['ANIO', 'MES_SIN', 'MES_COS', 'TOTAL_VENTAS_EN_SOLES'])
         input_data_scaled = scaler.transform(input_data)
         prediction = model.predict(input_data_scaled)[0]
         predictions.append(prediction)
@@ -91,14 +91,14 @@ def predict_total_ventas(anio, ventas_por_mes):
 
 # Ejemplo de uso
 anio_prediccion = 2024
-ventas_por_mes = [26791, 29417, 32550, 33372, 31989, 26213, 39217, 37939, 32550, 40300, 38565, 60320]
+avena_por_mes = [26791, 29417, 32550, 33372, 31989, 26213, 39217, 37939, 32550, 40300, 38565, 60320]
 
-predicciones = predict_total_ventas(anio_prediccion, ventas_por_mes)
+predicciones = predict_total_ventas(anio_prediccion, avena_por_mes)
 
 # Crear un DataFrame con las predicciones
 predictions_df = pd.DataFrame({
     'MES': range(1, 13),
-    'TOTAL_VENTAS_SOLES': ventas_por_mes,
+    'TOTAL_VENTAS_EN_SOLES': avena_por_mes,
     'Predicción VENTAS TOTALES EN CANTIDAD': predicciones
 })
 

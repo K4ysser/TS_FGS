@@ -258,8 +258,8 @@ def presentacion_graficos(request, year):
   
 def getPredictions_produccion(anio, avena_por_mes):
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    model_path = os.path.join(base_dir, "modelo_productividad.sav")
-    scaler_path = os.path.join(base_dir, "scaler_productividad.sav")
+    model_path = os.path.join(base_dir, "modelo_productividad_xgboost.sav")
+    scaler_path = os.path.join(base_dir, "scaler_productividad_xgboost.sav")
     
     model = pickle.load(open(model_path, "rb"))
     scaler = pickle.load(open(scaler_path, "rb"))
@@ -271,13 +271,13 @@ def getPredictions_produccion(anio, avena_por_mes):
         mes_cos = np.cos(2 * np.pi * mes / 12)
         
         input_data = pd.DataFrame([[anio, mes_sin, mes_cos, total_venta_en_soles]], 
-                                  columns=['ANIO', 'MES_SIN', 'MES_COS', 'TOTAL_VENTAS_EN_SOLES'])
+                                columns=['ANIO', 'MES_SIN', 'MES_COS', 'TOTAL_VENTAS_EN_SOLES'])
         input_data_scaled = scaler.transform(input_data)
         prediction = model.predict(input_data_scaled)[0]
-        predictions.append(prediction)
+        # Convertir el valor numpy a float de Python
+        predictions.append(float(prediction))
     
     return predictions
-
 
 def prediccion_data_prod(request):
     months = range(1, 13)
@@ -285,25 +285,34 @@ def prediccion_data_prod(request):
 
 def result_prod(request):
     if request.method == 'POST':
-        anio = int(request.POST['anio'])
-        avena_por_mes = [int(request.POST[f'avena_mes_{i}']) for i in range(1, 13)]
+        try:
+            anio = int(request.POST['anio'])
+            # Convertir los valores string a float y luego a int si es necesario
+            avena_por_mes = [float(request.POST[f'avena_mes_{i}']) for i in range(1, 13)]
+            
+            predictions = getPredictions_produccion(anio, avena_por_mes)
+            
+            result = {
+                'anio': anio,
+                'avena_por_mes': avena_por_mes,
+                'predictions': predictions,  # Ya está convertido a lista de floats
+                'status': 'success'
+            }
+            
+            return JsonResponse(result)
         
-        predictions = getPredictions_produccion(anio, avena_por_mes)
-        
-        result = {
-            'anio': anio,
-            'avena_por_mes': avena_por_mes,
-            'predictions': predictions,
-        }
-        
-        return JsonResponse(result)
+        except ValueError as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Error en la conversión de datos: {str(e)}'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Error inesperado: {str(e)}'
+            })
     else:
         return render(request, 'prediccion_data_prod.html')
-
-
-  
-  
-  
   
 # Datos para 209,2020,2021,2022,2023
 

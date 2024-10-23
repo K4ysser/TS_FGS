@@ -70,16 +70,32 @@
    <!--Inicio div-->
    <div class="grid-container">
     <!--Grafico 1-->
-    <div class="grid-item2">  
-      <div class="control has-icons-left" style="margin: 180px 0px 180px 0px;">
-        
-        
-        <div class="contenedor-grafico">
-            <canvas id="salesChart" style="margin-top: -144px;display: block;box-sizing: border-box; height: 300px; width: 600px;"></canvas>
+    <div class="grid-item2">
+
+        <div class="grid-item3">
+          <p class="header-text year-month">
+              Año: 2022 | Mes: Diciembre
+          </p>
+          <p id="ventasCantidad" class="header-text sales">
+              Ventas en Cantidad - 2022: 
+          </p>
+      </div>
+      
+        <div class="control has-icons-left" style="margin: 180px 0px 180px 0px">
+          <div class="contenedor-grafico">
+            <canvas
+              id="salesChart"
+              style="
+                margin-top: -215px;
+                display: block;
+                box-sizing: border-box;
+                height: 300px;
+                width: 600px;
+              "
+            ></canvas>
+          </div>
         </div>
-        </div>
-        
-    </div>
+      </div>
 
     <!--Grafico 2-->
    <div class="grid-item2">
@@ -164,7 +180,7 @@
              plugins: {
                  title: {
                      display: true,
-                     text: `Ventas en Cantidad - 2022: ${totalVentas}`,
+                     //text: `Ventas en Cantidad - 2022: ${totalVentas}`,
                      color: 'black' 
                  },
 
@@ -174,8 +190,8 @@
                      customSubtitle: {  // Cambiar 'subtitle' a 'customSubtitle' para que funcione con el plugin
                             display: true,
                             texts: [
-                            `Mes: Diciembre`,
-                            'Año: 2022'  // Agrega aquí el tercer subtítulo
+                            //`Mes: Diciembre`,
+                            //'Año: 2022'  // Agrega aquí el tercer subtítulo
                         ],
                             color: 'black' ,
                             position: 'top-left',
@@ -271,6 +287,11 @@
 
     // Añadir evento al botón de descarga
     document.getElementById('downloadBtn').addEventListener('click', downloadImage);
+   
+    // Actualizar el contenido del elemento con id "ventasCantidad"
+    document.getElementById("ventasCantidad").textContent = `Ventas en Cantidad - 2019: ${totalVentas}`;
+
+
 
     // FIN - Función de button para descarga de los canvas
 
@@ -432,12 +453,14 @@ function updatePredictionChart(data) {
       data: {
           labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
           datasets: [{
-              label: 'Prediccion de ventas',
+              label: 'Prediccion de Productos',
+              type: 'bar',
               data: data.predictions,
               borderColor: 'rgb(75, 192, 192)',
               tension: 0.1
           }, {
-              label: 'Meta de ventas',
+              label: 'Cantidad de Soles Ingresada',
+              type: 'bar',
               data: data.avena_por_mes,
               borderColor: 'rgb(255, 99, 132)',
               tension: 0.1
@@ -457,7 +480,7 @@ function updatePredictionChart(data) {
           plugins: {
               title: {
                   display: true,
-                  text: 'Grafico de Ventas Anual',
+                  text: 'Prediccion de Cantidades Anual',
                   color: 'black'
               },
               tooltip: {

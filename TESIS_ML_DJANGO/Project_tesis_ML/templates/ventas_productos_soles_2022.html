@@ -73,13 +73,31 @@
    <div class="grid-container">
     <!--Grafico 1-->
     <div class="grid-item2">
-      <div class="control has-icons-left" style="margin: 180px 0px 180px 0px;">
-                
-        <div class="contenedor-grafico">
-            <canvas id="salesChart" style="margin-top: -144px;display: block;box-sizing: border-box; height: 300px; width: 600px;"></canvas>
+
+        <div class="grid-item3">
+          <p class="header-text year-month">
+              Año: 2022 | Mes: Diciembre
+          </p>
+          <p id="ventasCantidad" class="header-text sales">
+              Ventas en Soles - 2022: 
+          </p>
+      </div>
+      
+        <div class="control has-icons-left" style="margin: 180px 0px 180px 0px">
+          <div class="contenedor-grafico">
+            <canvas
+              id="salesChart"
+              style="
+                margin-top: -215px;
+                display: block;
+                box-sizing: border-box;
+                height: 300px;
+                width: 600px;
+              "
+            ></canvas>
+          </div>
         </div>
-        </div>
-    </div>
+      </div>
 
      <!--Grafico 2-->
      <div class="grid-item2">
@@ -170,7 +188,7 @@ new Chart(ctx, {
         plugins: {
             title: {
                 display: true,
-                text: `Ventas en Soles - 2022: ${totalVentas}`,
+                //text: `Ventas en Soles - 2022: ${totalVentas}`,
                 color: 'black' 
             },
 
@@ -180,8 +198,8 @@ new Chart(ctx, {
                      customSubtitle: {  // Cambiar 'subtitle' a 'customSubtitle' para que funcione con el plugin
                             display: true,
                             texts: [
-                            `Mes: Diciembre`,
-                            'Año: 2022'  // Agrega aquí el tercer subtítulo
+                            //`Mes: Diciembre`,
+                            //'Año: 2022'  // Agrega aquí el tercer subtítulo
                         ],
                             color: 'black' ,
                             position: 'top-left',
@@ -274,6 +292,11 @@ new Chart(ctx, {
 
     // Añadir evento al botón de descarga
     document.getElementById('downloadBtn').addEventListener('click', downloadImage);
+
+    // Actualizar el contenido del elemento con id "ventasCantidad"
+    document.getElementById("ventasCantidad").textContent = `Ventas en Soles - 2022: ${totalVentas}`;
+
+
 
     // FIN - Función de button para descarga de los canvas
 

@@ -69,13 +69,31 @@
 <!--Inicio div-->
 <div class="grid-container">
   <!--Grafico 1-->
-  <div class="grid-item2">    
-    <div class="control has-icons-left" style="margin: 180px 0px 180px 0px;">
-                
+  <div class="grid-item2">
+
+    <div class="grid-item3">
+      <p class="header-text year-month">
+          Año: 2020 | Mes: Agosto
+      </p>
+      <p id="ventasCantidad" class="header-text sales">
+          Ventas en Soles - 2020: 
+      </p>
+  </div>
+  
+    <div class="control has-icons-left" style="margin: 180px 0px 180px 0px">
       <div class="contenedor-grafico">
-          <canvas id="salesChart" style="margin-top: -144px;display: block;box-sizing: border-box; height: 300px; width: 600px;"></canvas>
+        <canvas
+          id="salesChart"
+          style="
+            margin-top: -215px;
+            display: block;
+            box-sizing: border-box;
+            height: 300px;
+            width: 600px;
+          "
+        ></canvas>
       </div>
-      </div>
+    </div>
   </div>
 
   <!--Grafico 2-->
@@ -157,7 +175,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: `Ventas en Soles - 2020: ${totalVentas}`,
+                    //text: `Ventas en Soles - 2020: ${totalVentas}`,
                     color: 'black' 
                 },
                 padding:{
@@ -166,8 +184,8 @@
                      customSubtitle: {  // Cambiar 'subtitle' a 'customSubtitle' para que funcione con el plugin
                             display: true,
                             texts: [
-                            `Mes: Agosto`,
-                            'Año: 2020'  // Agrega aquí el tercer subtítulo
+                            //`Mes: Agosto`,
+                            //'Año: 2020'  // Agrega aquí el tercer subtítulo
                         ],
                             color: 'black' ,
                             position: 'top-left',
@@ -264,8 +282,11 @@
     // Añadir evento al botón de descarga
     document.getElementById('downloadBtn').addEventListener('click', downloadImage);
 
-    // FIN - Función de button para descarga de los canvas
+    
+    // Actualizar el contenido del elemento con id "ventasCantidad"
+    document.getElementById("ventasCantidad").textContent = `Ventas en Soles - 2020: ${totalVentas}`;
 
+    // FIN - Función de button para descarga de los canvas
 
     // Gráfico 2: Ventas por Año Seleccionado
     let dropdownChart;

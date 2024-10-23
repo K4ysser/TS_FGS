@@ -21,12 +21,48 @@
     margin-top: 20PX;
   }
 
+
     /* Estilo opcional para el botón */
     #openPopupBtn {
-        padding: 10px 20px;
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        margin-top: 13%;
-        cursor: pointer;
-    }
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      margin-top: 13%;
+      cursor: pointer;
+  }
+
+
+  .grid-item3 {
+    padding: 5px 20px 10px 13px;
+    text-align: center;
+    border: 2px solid black; /* Bordes definidos */
+    margin-top: 20px;
+    background-color: black; /* Color de fondo */
+    color: white; /* Color del texto */
+    border-bottom: 1px solid; /* Borde inferior */
+    border-radius: 5px; /* Bordes redondeados (opcional) */
+}
+  
+.header-text {
+    font-family: Arial, sans-serif; /* Fuente */
+    margin: 5px 0; /* Margen */
+}
+
+.year-month {
+    font-size: 16px; /* Tamaño de fuente para año/mes */
+    font-weight: bold; /* Negrita */
+}
+
+.sales {
+    font-size: 18px; /* Tamaño de fuente para ventas */
+    font-weight: bold; /* Negrita */
+}
+
+
+
+
+
+
+    
+  

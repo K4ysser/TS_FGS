@@ -14,26 +14,23 @@ def inicio(request):
     return render(request, 'inicio.html')
 
 
-# Función para obtener predicciones - Efciecia 
-def getPredictions(anio, avena_por_mes):
+# Función para obtener predicciones - EFICIENCIA 
+def getPredictions(anio, total_ventas_por_mes):
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    model_path = os.path.join(base_dir, "avena_sales_prediction_model.sav")
-    scaler_path = os.path.join(base_dir, "avena_sales_scaler.sav")
+    model_path = os.path.join(base_dir, "modelo_eficiencia_xgboost.sav")
+    scaler_path = os.path.join(base_dir, "scaler_eficiencia_xgboost.sav")
     
     model = pickle.load(open(model_path, "rb"))
     scaler = pickle.load(open(scaler_path, "rb"))
     
     predictions = []
-    for mes, total_avena in enumerate(avena_por_mes, start=1):
-        mes_sin = np.sin(2 * np.pi * mes / 12)
-        mes_cos = np.cos(2 * np.pi * mes / 12)
-        
-        input_data = pd.DataFrame([[anio, mes_sin, mes_cos, total_avena]], 
-                                  columns=['ANIO', 'MES_SIN', 'MES_COS', 'TOTAL_AVENA'])
+    for mes, total_venta in enumerate(total_ventas_por_mes, start=1):
+        input_data = pd.DataFrame([[anio, mes, total_venta]],  # Usar 'mes' en lugar de 'MES_SIN' y 'MES_COS'
+                                  columns=['ANIO', 'MESES_NUM', 'TOTAL_VENTAS'])
         input_data_scaled = scaler.transform(input_data)
         prediction = model.predict(input_data_scaled)[0]
         predictions.append(prediction)
-    
+
     return predictions
 
 
@@ -43,21 +40,26 @@ def prediccion_data(request):
 
 def result(request):
     if request.method == 'POST':
+        # Convertir los datos recibidos por POST
         anio = int(request.POST['anio'])
-        avena_por_mes = [int(request.POST[f'avena_mes_{i}']) for i in range(1, 13)]
+        total_ventas_por_mes = [int(request.POST[f'total_ventas_por_mes_{i}']) for i in range(1, 13)]
         
-        predictions = getPredictions(anio, avena_por_mes)
+        # Obtener predicciones
+        predictions = getPredictions(anio, total_ventas_por_mes)
         
+        # Convertir las predicciones a un formato serializable en JSON
         result = {
             'anio': anio,
-            'avena_por_mes': avena_por_mes,
-            'predictions': predictions,
+            'total_ventas_por_mes': total_ventas_por_mes,
+            'predictions': [float(pred) for pred in predictions],  # Asegurar que sean de tipo float
         }
         
+        # Retornar las predicciones en formato JSON
         return JsonResponse(result)
+    
     else:
+        # Renderizar el formulario de predicción si el método no es POST
         return render(request, 'prediccion_data.html')
-
 
 ##VENTAS PRODUCTOS EFICIENCIA -
 

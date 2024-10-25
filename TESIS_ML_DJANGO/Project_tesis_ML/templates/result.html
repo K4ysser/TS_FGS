@@ -75,7 +75,7 @@
       <p>Año: {{ result.anio }}</p>
       
       {% for i in months %}
-        <p>Mes {{ i }}: Total Avena: {{ result.avena_por_mes.i }} - Prediccion: {{ result.predictions.i }}</p>
+        <p>Mes {{ i }}: Total Avena: {{ result.total_ventas_por_mes.i }} - Prediccion: {{ result.predictions.i }}</p>
       {% endfor %}
       
       <br>
@@ -105,7 +105,7 @@
    <script>
     const ctx = document.getElementById('salesChart').getContext('2d');
     const predictions = {{ result.predictions|safe }};
-    const avena_por_mes = {{ result.avena_por_mes|safe }};
+    const total_ventas_por_mes = {{ result.total_ventas_por_mes|safe }};
     const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
     new Chart(ctx, {
@@ -119,7 +119,7 @@
                 tension: 0.1
             }, {
                 label: 'Total Avena',
-                data: avena_por_mes,
+                data: total_ventas_por_mes,
                 borderColor: 'rgb(255, 99, 132)',
                 tension: 0.1
             }]

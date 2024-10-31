@@ -1,17 +1,40 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect # agregue esto
 import pickle
 import numpy as np
 import pandas as pd
 import json
 import os
 from sklearn.preprocessing import MinMaxScaler
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 
 # our home page view
 
 def login_view(request):
-    return render(request, 'login.html')
+    # Usuario y contraseña definidos en el código
+    username_correcto = "forevergroup@gmail.com"
+    password_correcto = "12345678a."
+
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        # Verifica si el usuario y la contraseña son correctos
+        if username == username_correcto and password == password_correcto:
+            # Redirige a la URL deseada si la autenticación es correcta
+            return redirect("http://127.0.0.1:8000/result_prod/ventas_productos_cantidad_2019/")
+        else:
+            # En caso de error de autenticación, muestra un mensaje
+            return HttpResponse("Usuario o contraseña incorrectos.")
+
+    # Renderiza el template del login
+    return render(request, "login.html")
+
+
+
+
+#def login_view(request):
+#    return render(request, 'login.html')
 
 def inicio(request):
     return render(request, 'inicio.html')
@@ -66,6 +89,7 @@ def result(request):
 
 ##VENTAS PRODUCTOS EFICIENCIA -
 
+## Falta Actualizar a los datos reales
 def ventas_productos_soles_2019(request):
     data = [
         {"ANIO": 2019, "MESES": "Enero",   "TOTAL_VENTAS_EN_SOLES" : 208329.61},
@@ -181,6 +205,7 @@ def presentacion_graficos(request, year):
     # Por ejemplo:
     data = {
            '2019': [  # Datos para 2019         
+                      # Falta actualizar los datos reales //
                   {"ANIO": 2019, "MESES": "Enero",   "TOTAL_VENTAS_EN_SOLES" : 208329.61},
                   {"ANIO": 2019, "MESES": "Febrero",  "TOTAL_VENTAS_EN_SOLES": 173151.12},
                   {"ANIO": 2019, "MESES": "Marzo",    "TOTAL_VENTAS_EN_SOLES": 277780.46},
